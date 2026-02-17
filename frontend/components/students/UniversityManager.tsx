@@ -23,7 +23,7 @@ const UniversityManager: React.FC<UniversityManagerProps> = ({ onClose }) => {
     const fetchUniversities = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3000/api/universities', {
+            const response = await axios.get('/api/universities', {
                 headers: { Authorization: 'Bearer ' + token }
             });
             setUniversities(response.data);
@@ -40,7 +40,7 @@ const UniversityManager: React.FC<UniversityManagerProps> = ({ onClose }) => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:3000/api/universities', {
+            const response = await axios.post('/api/universities', {
                 name: newItem
             }, {
                 headers: { Authorization: 'Bearer ' + token }
@@ -56,7 +56,7 @@ const UniversityManager: React.FC<UniversityManagerProps> = ({ onClose }) => {
         if (!editValue.trim()) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:3000/api/universities/${id}`, {
+            await axios.put(`/api/universities/${id}`, {
                 name: editValue
             }, {
                 headers: { Authorization: 'Bearer ' + token }
@@ -73,7 +73,7 @@ const UniversityManager: React.FC<UniversityManagerProps> = ({ onClose }) => {
         if (!confirm('Are you sure? This might affect student records.')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3000/api/universities/${id}`, {
+            await axios.delete(`/api/universities/${id}`, {
                 headers: { Authorization: 'Bearer ' + token }
             });
             setUniversities(universities.filter(u => u.id !== id));

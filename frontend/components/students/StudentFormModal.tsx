@@ -28,7 +28,7 @@ const StudentFormModal: React.FC<StudentFormModalProps> = ({ isOpen, onClose, on
     const fetchUniversities = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3000/api/universities', {
+            const response = await axios.get('/api/universities', {
                 headers: { Authorization: 'Bearer ' + token }
             });
             setUniversities(response.data);
