@@ -41,7 +41,7 @@ const MetricsGrid: React.FC<MetricsGridProps> = ({ stats, netProfit, formatCurre
                 <div className="p-4 flex justify-between items-start">
                     <div>
                         <p className="text-[10px] font-black text-success-500 uppercase tracking-widest mb-2">To Collect</p>
-                        <p className="text-2xl md:text-3xl font-bold text-secondary-900 group-hover:text-success transition-apple">{formatCurrency(stats.pendingAmount)}</p>
+                        <p className="text-xl md:text-2xl font-bold text-secondary-900 group-hover:text-success transition-apple tracking-tighter truncate leading-tight">{formatCurrency(stats.pendingAmount)}</p>
                         <p className="text-[9px] text-secondary-400 font-bold uppercase mt-1">From Students</p>
                     </div>
                     <div className="p-2.5 bg-success/5 rounded-apple text-success group-hover:bg-success/10 transition-apple">
@@ -53,7 +53,7 @@ const MetricsGrid: React.FC<MetricsGridProps> = ({ stats, netProfit, formatCurre
                 <div className="p-4 flex justify-between items-start">
                     <div>
                         <p className="text-[10px] font-black text-warning-500 uppercase tracking-widest mb-2">To Pay</p>
-                        <p className="text-2xl md:text-3xl font-bold text-secondary-900 group-hover:text-warning transition-apple">{formatCurrency(stats.pendingWriterPay)}</p>
+                        <p className="text-xl md:text-2xl font-bold text-secondary-900 group-hover:text-warning transition-apple tracking-tighter truncate leading-tight">{formatCurrency(stats.pendingWriterPay)}</p>
                         <p className="text-[9px] text-secondary-400 font-bold uppercase mt-1">To Writers</p>
                     </div>
                     <div className="p-2.5 bg-warning/5 rounded-apple text-warning group-hover:bg-warning/10 transition-apple">
@@ -66,7 +66,7 @@ const MetricsGrid: React.FC<MetricsGridProps> = ({ stats, netProfit, formatCurre
                 <div className="flex justify-between items-start relative z-10">
                     <div>
                         <p className="text-white/70 text-xs font-medium uppercase tracking-wider mb-1.5">Net Profit</p>
-                        <p className="text-2xl md:text-3xl font-bold tracking-tight drop-shadow-sm">{formatCurrency(netProfit)}</p>
+                        <p className="text-xl md:text-2xl font-bold tracking-tighter drop-shadow-sm truncate leading-tight">{formatCurrency(netProfit)}</p>
                         <p className="text-[10px] text-white/60 font-medium mt-1">All Time</p>
                     </div>
                     <div className="p-2.5 bg-white/10 rounded-apple backdrop-blur-md border border-white/20 group-hover:scale-110 transition-transform duration-300">

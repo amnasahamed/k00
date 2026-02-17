@@ -249,12 +249,14 @@ app.delete('/api/assignments/:id', authenticateToken, isAdmin, async (req, res) 
 // Bulk operations for data management
 app.post('/api/clear-all', authenticateToken, isAdmin, async (req, res) => {
     try {
+        // Clear in order to respect dependencies (if any, though SQLite might not always enforce)
         await Assignment.destroy({ where: {}, truncate: true });
-        await Writer.destroy({ where: {}, truncate: true });
         await Student.destroy({ where: {}, truncate: true });
+        await Writer.destroy({ where: {}, truncate: true });
         await University.destroy({ where: {}, truncate: true });
         res.json({ success: true, message: 'All data cleared' });
     } catch (error) {
+        console.error('Clear all error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -273,7 +275,12 @@ app.post('/api/bulk-import', authenticateToken, isAdmin, async (req, res) => {
         });
 
         const writerResults = await Writer.bulkCreate(writers, {
-            updateOnDuplicate: ['phone', 'name', 'email', 'specialty', 'isFlagged', 'rating', 'availabilityStatus', 'maxConcurrentTasks', 'totalAssignments', 'completedAssignments', 'onTimeDeliveries', 'level', 'points', 'streak', 'lastActive']
+            updateOnDuplicate: [
+                'phone', 'name', 'email', 'specialty', 'isFlagged', 'rating',
+                'availabilityStatus', 'maxConcurrentTasks', 'totalAssignments',
+                'completedAssignments', 'onTimeDeliveries', 'level', 'points',
+                'streak', 'lastActive'
+            ]
         });
 
         const assignmentResults = await Assignment.bulkCreate(assignments, {
@@ -281,7 +288,8 @@ app.post('/api/bulk-import', authenticateToken, isAdmin, async (req, res) => {
                 'studentId', 'writerId', 'title', 'type', 'subject', 'level', 'deadline',
                 'status', 'priority', 'documentLink', 'wordCount', 'costPerWord', 'writerCostPerWord',
                 'price', 'paidAmount', 'writerPrice', 'writerPaidAmount', 'sunkCosts',
-                'isDissertation', 'totalChapters', 'chapters', 'description'
+                'isDissertation', 'totalChapters', 'chapters', 'description',
+                'activityLog', 'paymentHistory', 'statusHistory', 'attachments'
             ]
         });
 
@@ -294,6 +302,7 @@ app.post('/api/bulk-import', authenticateToken, isAdmin, async (req, res) => {
             }
         });
     } catch (error) {
+        console.error('Bulk import error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });

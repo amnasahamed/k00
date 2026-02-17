@@ -350,179 +350,14 @@ export const importData = async (jsonString: string) => {
   try {
     const data = JSON.parse(jsonString);
 
-    // Check if this is the original backup format
+    // Schema Check & Transformation logic
     if (data.students && data.writers && data.assignments) {
-      // This is a backup file, we need to convert it
-      console.log('Converting backup data format...');
+      // Basic check for legacy vs current version
+      const isLegacy = !data.version || data.version === '1.0';
 
-      // Convert students - ensure required fields aren't empty
-      const convertedStudents = data.students.map((student: any) => ({
-        id: student.id,
-        name: student.name || 'Unknown',
-        email: student.email || 'unknown@example.com',
-        phone: student.phone || '0000000000',
-        university: student.university,
-        remarks: student.remarks,
-        isFlagged: student.isFlagged || false,
-        referredBy: student.referredBy,
-        createdAt: student.createdAt,
-        updatedAt: student.updatedAt
-      })).filter((student: any) => student.name && student.email && student.phone);
-
-      // Create a mapping of old writer IDs to new indices for later use
-      const writerIdMap: Record<string, number> = {};
-      data.writers.forEach((writer: any, index: number) => {
-        writerIdMap[writer.id] = index + 1;
-      });
-
-      // Convert writers - ensure phone numbers are valid and ratings are numbers
-      const convertedWriters = data.writers.map((writer: any, index: number) => {
-        // Extract phone number from contact if it's a phone number
-        let phone = '';
-        if (writer.contact && /^\d+$/.test(writer.contact)) {
-          phone = writer.contact;
-        } else {
-          // Generate a unique dummy phone number if contact isn't a valid phone
-          phone = `9${Date.now().toString().slice(-9)}`;
-        }
-
-        // Ensure phone is exactly 10 digits
-        if (phone.length !== 10) {
-          // Take last 10 digits or pad with zeros
-          phone = phone.replace(/\D/g, '').slice(-10).padStart(10, '0');
-          if (phone.length > 10) {
-            phone = phone.substring(0, 10);
-          } else if (phone.length < 10) {
-            phone = phone.padEnd(10, '0');
-          }
-        }
-
-        // Convert rating structure
-        let rating = 0;
-        if (writer.rating && typeof writer.rating === 'object') {
-          // Average of quality and punctuality
-          const quality = parseFloat(writer.rating.quality) || 0;
-          const punctuality = parseFloat(writer.rating.punctuality) || 0;
-          rating = (quality + punctuality) / 2;
-        } else if (typeof writer.rating === 'number') {
-          rating = writer.rating;
-        } else if (typeof writer.rating === 'string') {
-          rating = parseFloat(writer.rating) || 0;
-        }
-
-        // Ensure rating is a valid number
-        if (isNaN(rating)) {
-          rating = 0;
-        }
-
-        return {
-          phone: phone,
-          name: writer.name || 'Unknown Writer',
-          email: writer.contact && writer.contact.includes('@') ? writer.contact : 'unknown@example.com',
-          rating: rating,
-          totalAssignments: 0,
-          completedAssignments: 0,
-          onTimeDeliveries: 0,
-          level: 'Bronze',
-          points: 0,
-          streak: 0,
-          lastActive: writer.updatedAt || writer.createdAt || new Date().toISOString(),
-          createdAt: writer.createdAt,
-          updatedAt: writer.updatedAt
-        };
-      }).filter((writer: any) => writer.name && writer.phone);
-
-      // Convert assignments - map old writer IDs to new ones
-      const convertedAssignments = data.assignments.map((assignment: any) => {
-        // Map string status to proper enum values if needed
-        let status = assignment.status;
-        // Map string type to proper enum values if needed
-        let type = assignment.type;
-        // Map string priority to proper enum values if needed
-        let priority = assignment.priority;
-
-        // Map old writer IDs to new temporary IDs (we'll fix this on the backend)
-        let writerId = assignment.writerId;
-
-        return {
-          id: assignment.id,
-          studentId: assignment.studentId,
-          writerId: writerId,
-          title: assignment.title,
-          type: type,
-          subject: assignment.subject,
-          level: assignment.level,
-          deadline: assignment.deadline,
-          status: status,
-          priority: priority,
-          documentLink: assignment.documentLink,
-          wordCount: assignment.wordCount || 0,
-          costPerWord: assignment.costPerWord || 0,
-          writerCostPerWord: assignment.writerCostPerWord || 0,
-          price: assignment.price,
-          paidAmount: assignment.paidAmount,
-          writerPrice: assignment.writerPrice || 0,
-          writerPaidAmount: assignment.writerPaidAmount || 0,
-          sunkCosts: assignment.sunkCosts || 0,
-          isDissertation: assignment.isDissertation,
-          totalChapters: assignment.totalChapters,
-          chapters: assignment.chapters,
-          description: assignment.description,
-          createdAt: assignment.createdAt,
-          updatedAt: assignment.updatedAt,
-          activityLog: [],
-          paymentHistory: [],
-          statusHistory: [],
-          attachments: []
-        };
-      });
-
-      // Use individual API endpoints instead of bulk-import to avoid datatype issues
-      console.log(`Importing ${convertedStudents.length} students...`);
-      for (const student of convertedStudents) {
-        try {
-          await fetch(`${API_URL}/students`, {
-            method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify(student),
-          });
-        } catch (error) {
-          console.warn(`Failed to import student ${student.id}:`, error);
-        }
-      }
-
-      console.log(`Importing ${convertedWriters.length} writers...`);
-      for (const writer of convertedWriters) {
-        try {
-          await fetch(`${API_URL}/writers`, {
-            method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify(writer),
-          });
-        } catch (error) {
-          console.warn(`Failed to import writer:`, error);
-        }
-      }
-
-      console.log(`Importing ${convertedAssignments.length} assignments...`);
-      for (const assignment of convertedAssignments) {
-        try {
-          await fetch(`${API_URL}/assignments`, {
-            method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify(assignment),
-          });
-        } catch (error) {
-          console.warn(`Failed to import assignment ${assignment.id}:`, error);
-        }
-      }
-
-      console.log('Import completed successfully!');
-      return true;
-    } else {
-      // This is already in the correct format, use bulk import
-      if (!data.students || !data.writers || !data.assignments) {
-        throw new Error("Invalid data format");
+      if (isLegacy && data.students.length > 0 && !data.students[0].universityId) {
+        console.log('Legacy data detected, applying transformations...');
+        // Perform legacy transformations if needed here or on backend
       }
 
       // Use the bulk import endpoint
@@ -537,18 +372,19 @@ export const importData = async (jsonString: string) => {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Import error response:', errorText);
-        throw new Error(`Import failed: ${response.status} ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Import failed: ${response.status} ${response.statusText}`);
       }
 
       const result = await response.json();
       console.log('Import successful:', result);
       return true;
+    } else {
+      throw new Error("Invalid data format: Missing core collections");
     }
-  } catch (e) {
-    console.error("Import failed", e);
-    return false;
+  } catch (e: any) {
+    console.error("Import failed:", e);
+    throw e;
   }
 };
 

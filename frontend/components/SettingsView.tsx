@@ -67,13 +67,18 @@ const SettingsView: React.FC = () => {
     const handleBackup = async () => {
         try {
             const data = await DataService.getExportData();
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
             const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("href", url);
             downloadAnchorNode.setAttribute("download", `taskmaster_backup_${new Date().toISOString().split('T')[0]}.json`);
-            document.body.appendChild(downloadAnchorNode); // required for firefox
+            document.body.appendChild(downloadAnchorNode);
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
+            URL.revokeObjectURL(url);
+
             addToast('Backup downloaded successfully', 'success');
         } catch (error) {
             console.error("Backup failed", error);
