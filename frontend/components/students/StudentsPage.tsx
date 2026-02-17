@@ -59,12 +59,11 @@ const StudentsPage: React.FC = () => {
         }
     };
 
-    const handleSaveStudent = async (e: React.FormEvent) => { // Renamed from handleSave
-        e.preventDefault();
-        if (!editingStudent.name) return;
+    const handleSaveStudent = async (studentData: Partial<Student>) => {
+        if (!studentData.name) return;
         try {
-            const saved = await DataService.saveStudent(editingStudent as Student);
-            setIsFormOpen(false); // Changed from setIsModalOpen
+            const saved = await DataService.saveStudent(studentData as Student);
+            setIsFormOpen(false);
             setEditingStudent({});
             await refreshData();
             setSelectedStudentId(saved.id);
@@ -259,12 +258,11 @@ const StudentsPage: React.FC = () => {
             </Modal>
 
             <StudentFormModal
-                isOpen={isFormOpen} // Changed from isModalOpen
-                onClose={() => setIsFormOpen(false)} // Changed from setIsModalOpen
-                student={editingStudent}
+                isOpen={isFormOpen}
+                onClose={() => setIsFormOpen(false)}
+                initialData={editingStudent}
                 students={students}
-                onStudentChange={setEditingStudent}
-                onSave={handleSaveStudent} // Changed from handleSave
+                onSubmit={handleSaveStudent}
             />
 
             {isAnalyticsOpen && (
