@@ -14,51 +14,55 @@ const WorkloadPieChart: React.FC<WorkloadPieChartProps> = ({ statusData }) => {
             <div className="p-4 border-b border-secondary-100/50">
                 <h3 className="font-bold text-secondary-900 text-sm tracking-tight uppercase">Status Distribution</h3>
             </div>
-            <div className="h-[240px] w-full p-2">
-                <ResponsiveContainer width="99%" height="100%" minHeight={240}>
-                    <PieChart>
-                        <Pie
-                            data={statusData}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={50}
-                            outerRadius={70}
-                            paddingAngle={5}
-                            dataKey="value"
-                            stroke="none"
-                        >
-                            {statusData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
-                        <Tooltip
-                            contentStyle={{
-                                borderRadius: '16px',
-                                border: '1px solid rgba(0,0,0,0.05)',
-                                boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
-                                padding: '8px 12px',
-                                fontSize: '10px',
-                                fontWeight: 'bold',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.05em'
-                            }}
-                        />
-                        <Legend
-                            verticalAlign="bottom"
-                            height={40}
-                            iconType="circle"
-                            iconSize={8}
-                            wrapperStyle={{
-                                fontSize: '9px',
-                                fontWeight: '900',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.1em',
-                                color: '#94a3b8',
-                                paddingBottom: '10px'
-                            }}
-                        />
-                    </PieChart>
-                </ResponsiveContainer>
+            <div className="h-[240px] w-full p-2 relative" style={{ minHeight: '240px' }}>
+                {(!statusData || statusData.length === 0) ? (
+                    <div className="flex items-center justify-center h-full text-gray-400 text-xs">No data available</div>
+                ) : (
+                    <ResponsiveContainer width="99%" height="100%" minHeight={240}>
+                        <PieChart>
+                            <Pie
+                                data={statusData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={50}
+                                outerRadius={70}
+                                paddingAngle={5}
+                                dataKey="value"
+                                stroke="none"
+                            >
+                                {statusData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip
+                                contentStyle={{
+                                    borderRadius: '16px',
+                                    border: '1px solid rgba(0,0,0,0.05)',
+                                    boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
+                                    padding: '8px 12px',
+                                    fontSize: '10px',
+                                    fontWeight: 'bold',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.05em'
+                                }}
+                            />
+                            <Legend
+                                verticalAlign="bottom"
+                                height={40}
+                                iconType="circle"
+                                iconSize={8}
+                                wrapperStyle={{
+                                    fontSize: '9px',
+                                    fontWeight: '900',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.1em',
+                                    color: '#94a3b8',
+                                    paddingBottom: '10px'
+                                }}
+                            />
+                        </PieChart>
+                    </ResponsiveContainer>
+                )}
             </div>
         </Card>
     );
