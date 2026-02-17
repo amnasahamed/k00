@@ -14,9 +14,10 @@ if (connectionString) {
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false // Required for some providers like Heroku/Vercel Postgres
+        rejectUnauthorized: false
       }
     },
+    dialectModule: require('pg'), // Critical for Vercel/Serverless to bundle pg
     logging: false
   });
   console.log('Connected to PostgreSQL database');
