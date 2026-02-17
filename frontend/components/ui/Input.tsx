@@ -1,4 +1,5 @@
 import React, { InputHTMLAttributes } from 'react';
+import { numberToWords } from '../../utils/format';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
@@ -44,6 +45,11 @@ export const Input: React.FC<InputProps> = ({
                     {...props}
                 />
             </div>
+            {props.type === 'number' && props.value !== undefined && props.value !== '' && !isNaN(Number(props.value)) && Number(props.value) !== 0 && (
+                <p className="text-[10px] font-bold text-primary-600/70 uppercase tracking-widest pl-1 animate-in fade-in slide-in-from-top-1 duration-300">
+                    {numberToWords(Number(props.value))}
+                </p>
+            )}
             {error && (
                 <p className="text-xs text-danger mt-1">{error}</p>
             )}
