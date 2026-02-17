@@ -15,7 +15,7 @@ const WorkloadPieChart: React.FC<WorkloadPieChartProps> = ({ statusData }) => {
                 <h3 className="font-bold text-secondary-900 text-sm tracking-tight uppercase">Status Distribution</h3>
             </div>
             <div className="h-[240px] w-full p-2">
-                <ResponsiveContainer width="100%" height="100%" minHeight={240}>
+                <ResponsiveContainer width="99%" height="100%" minHeight={240}>
                     <PieChart>
                         <Pie
                             data={statusData}
