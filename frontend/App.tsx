@@ -3,17 +3,38 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import Layout from './components/Layout';
 
-// Lazy Loaded Components for better performance
-const Dashboard = React.lazy(() => import('./components/dashboard'));
-const StudentsView = React.lazy(() => import('./components/students'));
-const AssignmentsView = React.lazy(() => import('./components/assignments'));
-const PaymentsView = React.lazy(() => import('./components/payments'));
-const WritersView = React.lazy(() => import('./components/writers'));
-const SettingsView = React.lazy(() => import('./components/SettingsView'));
-const AuditLogView = React.lazy(() => import('./components/AuditLogView'));
-const AdminLogin = React.lazy(() => import('./components/AdminLogin'));
-const WriterLogin = React.lazy(() => import('./components/WriterLogin'));
-const WriterDashboard = React.lazy(() => import('./components/WriterDashboard'));
+// Utility to handle dynamic import failures (common during redeploys)
+const lazyRetry = (componentImport: () => Promise<any>) => {
+  return React.lazy(async () => {
+    const pageHasBeenForceRefreshed = JSON.parse(
+      window.localStorage.getItem('page-has-been-force-refreshed') || 'false'
+    );
+
+    try {
+      const component = await componentImport();
+      window.localStorage.setItem('page-has-been-force-refreshed', 'false');
+      return component;
+    } catch (error) {
+      if (!pageHasBeenForceRefreshed) {
+        window.localStorage.setItem('page-has-been-force-refreshed', 'true');
+        return window.location.reload();
+      }
+      throw error;
+    }
+  });
+};
+
+// Lazy Loaded Components with retry logic
+const Dashboard = lazyRetry(() => import('./components/dashboard'));
+const StudentsView = lazyRetry(() => import('./components/students'));
+const AssignmentsView = lazyRetry(() => import('./components/assignments'));
+const PaymentsView = lazyRetry(() => import('./components/payments'));
+const WritersView = lazyRetry(() => import('./components/writers'));
+const SettingsView = lazyRetry(() => import('./components/SettingsView'));
+const AuditLogView = lazyRetry(() => import('./components/AuditLogView'));
+const AdminLogin = lazyRetry(() => import('./components/AdminLogin'));
+const WriterLogin = lazyRetry(() => import('./components/WriterLogin'));
+const WriterDashboard = lazyRetry(() => import('./components/WriterDashboard'));
 
 // Protected Route Component wrapping the logic
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {

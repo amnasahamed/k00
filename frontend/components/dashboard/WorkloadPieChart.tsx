@@ -18,7 +18,7 @@ const WorkloadPieChart: React.FC<WorkloadPieChartProps> = ({ statusData }) => {
                 {(!statusData || statusData.length === 0) ? (
                     <div className="flex items-center justify-center h-full text-gray-400 text-xs">No data available</div>
                 ) : (
-                    <ResponsiveContainer width="99%" height="100%" minHeight={240}>
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                         <PieChart>
                             <Pie
                                 data={statusData}

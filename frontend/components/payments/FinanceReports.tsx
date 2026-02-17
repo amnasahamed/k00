@@ -94,7 +94,7 @@ const FinanceReports: React.FC<FinanceReportsProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Card title="Financial Performance Trend" className="h-[360px]">
                         <div className="h-[280px] w-full mt-2 min-h-[280px] min-w-[300px]">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={280}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                                 <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                                     <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={11} tick={{ fill: '#94a3b8' }} />
@@ -121,7 +121,7 @@ const FinanceReports: React.FC<FinanceReportsProps> = ({
 
                     <Card title="Job Volume Seasonality" className="h-[360px]">
                         <div className="h-[280px] w-full mt-2 min-h-[280px] min-w-[300px]">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={280}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                                 <AreaChart data={seasonalityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="colorJobs" x1="0" y1="0" x2="0" y2="1">
@@ -154,7 +154,7 @@ const FinanceReports: React.FC<FinanceReportsProps> = ({
                     <Card title="Writer Performance Matrix" className="h-[360px]">
                         <p className="text-[10px] text-gray-400 mb-2">Cost/Word vs Quality Rating • Size = Volume</p>
                         <div className="h-[260px] w-full min-h-[260px] min-w-[300px]">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={260}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                                 <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
                                     <CartesianGrid />
                                     <XAxis type="number" dataKey="x" name="Cost/Word" unit="₹" fontSize={11} />
@@ -179,7 +179,7 @@ const FinanceReports: React.FC<FinanceReportsProps> = ({
                     <Card title="Top 5 VIP Clients (Lifetime Value)" className="h-[360px]">
                         <p className="text-[10px] text-gray-400 mb-1">Rings indicate contribution relative to top earner</p>
                         <div className="h-[280px] w-full min-h-[280px] min-w-[300px]">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={280}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                                 <RadialBarChart
                                     innerRadius="10%"
                                     outerRadius="90%"
@@ -223,7 +223,7 @@ const FinanceReports: React.FC<FinanceReportsProps> = ({
                     <Card title="Business Shape (Subject Mix)" className="h-[360px]">
                         <p className="text-[10px] text-gray-400 mb-1">Profit distribution across subjects</p>
                         <div className="h-[280px] w-full min-h-[280px] min-w-[300px]">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={280}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                                 <RadarChart cx="50%" cy="50%" outerRadius="75%" data={subjectData}>
                                     <PolarGrid />
                                     <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: '#64748b' }} />
@@ -253,7 +253,7 @@ const FinanceReports: React.FC<FinanceReportsProps> = ({
                     <Card title="Referral Network Impact" className="h-[360px]">
                         <p className="text-[10px] text-gray-400 mb-2">Impact Analysis: Volume (X) vs Revenue (Y) vs Avg Value (Size)</p>
                         <div className="h-[280px] w-full min-h-[280px] min-w-[300px]">
-                            <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={280}>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                                 <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis type="number" dataKey="x" name="Referrals Made" fontSize={11} />
