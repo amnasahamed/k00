@@ -53,9 +53,6 @@ const AdminLogin: React.FC = () => {
         <source src="/login-bg.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlay - Darkened with slight blur for premium feel */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-10"></div>
-
       <div className="w-full max-w-md animate-fade-in relative z-20">
         <div className="text-center mb-8">
           <div className="mx-auto w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-4 text-white shadow-lg border border-white/20">
