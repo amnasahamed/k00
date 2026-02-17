@@ -8,19 +8,23 @@ let sequelize;
 const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 
 if (connectionString) {
-  sequelize = new Sequelize(connectionString, {
-    dialect: 'postgres',
-    protocol: 'postgres',
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    },
-    dialectModule: require('pg'), // Critical for Vercel/Serverless to bundle pg
-    logging: false
-  });
-  console.log('Connected to PostgreSQL database');
+  try {
+    sequelize = new Sequelize(connectionString, {
+      dialect: 'postgres',
+      protocol: 'postgres',
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+        }
+      },
+      dialectModule: require('pg'), // Critical for Vercel/Serverless to bundle pg
+      logging: false
+    });
+    console.log('Sequelize initialized with Postgres');
+  } catch (error) {
+    console.error('Failed to initialize Sequelize:', error);
+  }
 } else {
   // Fallback to SQLite (for local development)
   // On Vercel (if not using Postgres), the filesystem is read-only except for /tmp.
