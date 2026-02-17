@@ -312,6 +312,25 @@ app.use((err, req, res, next) => {
     });
 });
 
+// Debug Endpoint
+app.get('/api/debug-db', async (req, res) => {
+    try {
+        await sequelize.authenticate();
+        const tables = await sequelize.getQueryInterface().showAllSchemas();
+        res.json({
+            status: 'connected',
+            dialect: sequelize.getDialect(),
+            tables: tables
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
+    }
+});
+
 // Initialize Database and Start Server
 // Use alter: true to update schema (add completedAt) without dropping data
 sequelize.sync().then(async () => {
