@@ -6,9 +6,10 @@ interface CardProps {
   title?: string;
   action?: React.ReactNode;
   onClick?: () => void;
+  noPadding?: boolean;
 }
 
-export const Card: React.FC<CardProps> = ({ children, className = '', title, action, onClick }) => {
+export const Card: React.FC<CardProps> = ({ children, className = '', title, action, onClick, noPadding = false }) => {
   return (
     <div
       onClick={onClick}
@@ -20,7 +21,7 @@ export const Card: React.FC<CardProps> = ({ children, className = '', title, act
           {action && <div>{action}</div>}
         </div>
       )}
-      <div className="p-5 flex-1 min-h-0">
+      <div className={`${noPadding ? '' : 'p-5'} flex-1 min-h-0`}>
         {children}
       </div>
     </div>
