@@ -297,21 +297,6 @@ app.post('/api/bulk-import', authenticateToken, isAdmin, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
-// Catch-all handler to serve the React app for any other route
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-    console.error('Unhandled error:', err);
-    res.status(500).json({
-        error: 'Internal server error',
-        message: process.env.NODE_ENV === 'production' ? 'Something went wrong' : err.message
-    });
-});
-
 // Debug Endpoint
 app.get('/api/debug-db', async (req, res) => {
     try {
@@ -330,6 +315,20 @@ app.get('/api/debug-db', async (req, res) => {
         });
     }
 });
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err);
+    res.status(500).json({
+        error: 'Internal server error',
+        message: process.env.NODE_ENV === 'production' ? 'Something went wrong' : err.message
+    });
+});
+
+
 
 // Initialize Database and Start Server
 // Use alter: true to update schema (add completedAt) without dropping data
