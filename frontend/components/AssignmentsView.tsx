@@ -396,12 +396,6 @@ const AssignmentsView: React.FC = () => {
     // Auto-calculate price
     useEffect(() => {
         if (isModalOpen && editingAssignment) {
-            if (editingAssignment.wordCount && editingAssignment.costPerWord) {
-                setEditingAssignment(prev => ({
-                    ...prev,
-                    price: (prev.wordCount || 0) * (prev.costPerWord || 0)
-                }));
-            }
             if (editingAssignment.wordCount && editingAssignment.writerCostPerWord) {
                 setEditingAssignment(prev => ({
                     ...prev,
@@ -409,7 +403,7 @@ const AssignmentsView: React.FC = () => {
                 }));
             }
         }
-    }, [editingAssignment.wordCount, editingAssignment.costPerWord, editingAssignment.writerCostPerWord]);
+    }, [editingAssignment.wordCount, editingAssignment.writerCostPerWord]);
 
     const getStatusStyles = (status: AssignmentStatus) => {
         switch (status) {
@@ -789,7 +783,6 @@ const AssignmentsView: React.FC = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <Input label="Word Count" type="number" value={editingAssignment.wordCount} onChange={e => setEditingAssignment({ ...editingAssignment, wordCount: Number(e.target.value) })} />
-                                <Input label="Student Rate/Word" type="number" step="0.1" value={editingAssignment.costPerWord} onChange={e => setEditingAssignment({ ...editingAssignment, costPerWord: Number(e.target.value) })} />
                             </div>
 
                             <div className="bg-green-50/50 p-4 rounded-xl border border-green-100 space-y-3">

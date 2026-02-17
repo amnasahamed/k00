@@ -407,15 +407,8 @@ const AssignmentsPage: React.FC = () => {
         setSelectedIds(newSet);
     };
 
-    // Auto-calculate price
     useEffect(() => {
         if (isModalOpen && editingAssignment) {
-            if (editingAssignment.wordCount && editingAssignment.costPerWord) {
-                setEditingAssignment(prev => ({
-                    ...prev,
-                    price: (prev.wordCount || 0) * (prev.costPerWord || 0)
-                }));
-            }
             if (editingAssignment.wordCount && editingAssignment.writerCostPerWord) {
                 setEditingAssignment(prev => ({
                     ...prev,
@@ -423,7 +416,7 @@ const AssignmentsPage: React.FC = () => {
                 }));
             }
         }
-    }, [editingAssignment.wordCount, editingAssignment.costPerWord, editingAssignment.writerCostPerWord]);
+    }, [editingAssignment.wordCount, editingAssignment.writerCostPerWord]);
 
     const filteredAssignments = React.useMemo(() => {
         return assignments

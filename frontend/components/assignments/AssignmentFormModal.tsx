@@ -146,7 +146,6 @@ const AssignmentFormModal: React.FC<AssignmentFormModalProps> = ({
 
                                 <div className="bg-success/5 p-4 rounded-apple border border-success/10 space-y-3">
                                     <Input label="Word Count" type="number" value={assignment.wordCount} onChange={e => onAssignmentChange({ ...assignment, wordCount: Number(e.target.value) })} className="bg-white border-success-100/30" />
-                                    <Input label="Student Rate/Word" type="number" step="0.1" value={assignment.costPerWord} onChange={e => onAssignmentChange({ ...assignment, costPerWord: Number(e.target.value) })} className="bg-white border-success-100/30" />
                                     <div className="pt-2 border-t border-success/10">
                                         <Input label="Total Price" type="number" value={assignment.price} onChange={e => onAssignmentChange({ ...assignment, price: Number(e.target.value) })} className="bg-white border-success-100/50 font-bold" />
                                         <Input label="Paid Amount" type="number" value={assignment.paidAmount} onChange={e => onAssignmentChange({ ...assignment, paidAmount: Number(e.target.value) })} className="mt-2 bg-white border-success-100/50" />
