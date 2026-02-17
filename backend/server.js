@@ -301,11 +301,29 @@ app.post('/api/bulk-import', authenticateToken, isAdmin, async (req, res) => {
 app.get('/api/debug-db', async (req, res) => {
     try {
         await sequelize.authenticate();
-        const tables = await sequelize.getQueryInterface().showAllSchemas();
+
+        // Manual sync trigger
+        if (req.query.sync) {
+            console.log('Manual sync triggered via debug endpoint');
+            await sequelize.sync({ alter: true });
+        }
+
+        // Check tables (Postgres specific query often reliable, or Sequelize's method)
+        let tables = [];
+        try {
+            // showAllTables is not standard in all Sequelize versions, sticking to raw query for Postgres certainty
+            // OR just use qInterface.showAllSchemas() was definitely wrong.
+            // standard way:
+            tables = await sequelize.getQueryInterface().showAllTables();
+        } catch (e) {
+            tables = [`Error listing tables: ${e.message}`];
+        }
+
         res.json({
             status: 'connected',
             dialect: sequelize.getDialect(),
-            tables: tables
+            tables: tables,
+            syncMessage: req.query.sync ? 'Sync attempted' : 'Use ?sync=true to force table creation'
         });
     } catch (error) {
         res.status(500).json({
