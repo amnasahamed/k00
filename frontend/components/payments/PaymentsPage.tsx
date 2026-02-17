@@ -9,6 +9,7 @@ import PaymentStatsStrip from './PaymentStatsStrip';
 import PaymentList from './PaymentList';
 import PaymentModal from './PaymentModal';
 import FinanceReports from './FinanceReports';
+import CelebrationOverlay from '../ui/CelebrationOverlay';
 
 type PaymentType = 'incoming' | 'outgoing' | 'finance';
 
@@ -28,6 +29,7 @@ const PaymentsPage: React.FC = () => {
     const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null);
     const [paymentAmount, setPaymentAmount] = useState<number>(0);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [showCelebration, setShowCelebration] = useState(false);
 
     // Chart Data State
     const [monthlyData, setMonthlyData] = useState<any[]>([]);
@@ -289,6 +291,7 @@ const PaymentsPage: React.FC = () => {
             setSelectedAssignment(null);
             await refreshData();
             addToast('Transaction recorded successfully', 'success');
+            setShowCelebration(true); // Trigger celebration
         } catch (error) {
             console.error("Failed to record transaction", error);
             addToast('Failed to record transaction', 'error');
@@ -382,6 +385,11 @@ const PaymentsPage: React.FC = () => {
                 onAmountChange={setPaymentAmount}
                 onSubmit={handlePayment}
                 formatCurrency={formatCurrency}
+            />
+
+            <CelebrationOverlay
+                show={showCelebration}
+                onComplete={() => setShowCelebration(false)}
             />
         </div>
     );
