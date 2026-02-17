@@ -41,45 +41,59 @@ const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-secondary-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md animate-fade-in">
+    <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+      {/* Video Background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/login-bg.mp4" type="video/mp4" />
+      </video>
+
+      {/* Overlay - Darkened with slight blur for premium feel */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] z-10"></div>
+
+      <div className="w-full max-w-md animate-fade-in relative z-20">
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-4 text-primary-600 shadow-sm">
+          <div className="mx-auto w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-4 text-white shadow-lg border border-white/20">
             <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-secondary-900 tracking-tight">Admin Portal</h1>
-          <p className="text-secondary-500 mt-2">Secure access for administrators</p>
+          <h1 className="text-3xl font-black text-white tracking-tight drop-shadow-md">ADMIN PORTAL</h1>
+          <p className="text-white/70 font-medium uppercase tracking-widest text-[10px] mt-2">Secure access for administrators</p>
         </div>
 
-        <Card className="shadow-lg">
+        <Card className="shadow-2xl bg-white/95 backdrop-blur-sm border-0">
           <form onSubmit={handleSubmit} className="space-y-6">
             <Input
-              label="Password"
+              label="Admin Key"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter admin key"
+              placeholder="••••••••"
               required
               autoFocus
-              className="text-lg tracking-widest"
+              className="text-lg tracking-[0.5em] bg-secondary-50/50"
               error={error}
             />
 
             <Button
               type="submit"
               variant="primary"
-              className="w-full py-3 text-base shadow-md hover:shadow-lg transition-all"
+              className="w-full py-4 text-sm font-black uppercase tracking-widest shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
               isLoading={loading}
               disabled={password.length === 0}
             >
-              Authenticate
+              Unlock Dashboard
             </Button>
           </form>
         </Card>
 
-        <p className="text-center text-xs text-secondary-400 mt-8">
+        <p className="text-center text-[10px] font-bold uppercase tracking-widest text-white/50 mt-8">
           k0nach! &copy; {new Date().getFullYear()}
         </p>
       </div>
