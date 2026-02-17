@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    container_name: taskmaster-pro
+    ports:
+      - "${HOST_PORT:-3000}:3000"
+    volumes:
+      # Mount database file for persistence
+      - ./data:/app/data
+    environment:
+      - PORT=3000
+      - DB_PATH=/app/data/database.sqlite
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/" ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
