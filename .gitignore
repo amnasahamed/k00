@@ -1,0 +1,26 @@
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/*.local
+**/.DS_Store
+**/.env
+**/.env.*.local
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+**/.idea/
+**/.vscode/
+**/*.tsbuildinfo
+
+# Local SQLite databases (user data) and large media files
+**/*.sqlite
+**/*.sqlite-journal
+# Allow the login page's video (small, used by the app) but exclude the
+# larger sample/AI-generated video that was sitting in the repo root.
+**/*.mp4
+!frontend/public/login-bg.mp4
+**/*.mov
+**/*.zip
+**/taskmaster_backup_*.json
+grok-video-*.mp4
